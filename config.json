@@ -1,0 +1,14 @@
+{
+    "baseURL": "http://www.nullzero.io/",
+    "languageCode": "en-us",
+    "title": "NullZero.io",
+    "theme": "hugo_theme_pickles",
+    "params": {
+        "paginate": 10,
+        "twitter": "vScripter",
+        "github": "vScripter",
+        "author": "Kevin Kirkpatrick",
+        "subtitle": "A virtual bitbucket of ramblings about data center and cloud technology.",
+        "favicon": "/static/public/favicon.ico"
+    }
+}
