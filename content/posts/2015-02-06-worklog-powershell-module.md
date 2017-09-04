@@ -3,8 +3,9 @@ title: WorkLog PowerShell Module
 linktitle: WorkLog PowerShell Module
 date: 2015-02-06
 author: "Kevin Kirkpatrick"
-weight: 10
 draft: false
+tags:
+  - powershell
 ---
 
 As part of a new initiative, of sorts, I wanted a way to record daily accomplishments, which is something that I have thought about doing for quite some time, but never got enough motivation to actually do anything about it. That said, I decided to revisit, take action and come up with some requirements on what a workable solution would look like (for me):
@@ -17,21 +18,21 @@ As part of a new initiative, of sorts, I wanted a way to record daily accomplish
 Given each of those, my final solution ended up being quite simple: GitHub and GitHub Flavored Markdown (GFM) files. This was ideal, because it really meets all of the requirements, above.
 
   * It needs to be easy to record entries
-      * Use Sublime Text to create/edit GFM files for each day.
+   * _Use Sublime Text to create/edit GFM files for each day._
   * It needs to fit into my daily workflow
-      * I already use GitHub on a daily basis for source control of various scripts, projects, modules, etc.
+   * _I already use GitHub on a daily basis for source control of various scripts, projects, modules, etc._
   * The format needs to be somewhat open/easy to move between different platforms
-      * Again, I already use GitHub as a central source control for all of my code repositories and have that synced between my Windows and Mac systems
+   * _Again, I already use GitHub as a central source control for all of my code repositories and have that synced between my Windows and Mac systems_
   * If possible, pick a solution that can sharpen a skill-set, in the process
-      * While familiar with GitHub and GFM files, I can always use some extra practice
+   * _While familiar with GitHub and GFM files, I can always use some extra practice_
 
 Now, after I started building out how I wanted things setup and started creating entries into a log file, I realized that flipping over to a text editor to make entries was working fine, but I wanted deeper integration; why not use PowerShell!
 
 What resulted was a PowerShell module comprised of 3 functions:
 
-  * New-WorkLog
-  * Add-WorkLog
-  * Get-WorkLog
+* New-WorkLog
+* Add-WorkLog
+* Get-WorkLog
 
 The main functionality I needed out of this module was:
 
@@ -79,12 +80,13 @@ BEGIN {
 } # end BEGIN block
 ```
 
-- I need to get some date details and convert them to strings so that I can create a custom, standard file name as well as the date detail that will get stored in the actual file.
-  - `$now` - Get and assign the current date information in the $now variable, so that we can use to construct our custom file format.
-  - `$dateFormat` - Call the .tostring() method on the $now variable and format the output so it will look like '20150205'
-  - `$dateDay` - Call the .tostring() method but specify 'dddd' in order to get the day of the week in long format, like 'Thursday'
-  - `$fileName` - Build out the actual file name string. I'm adding the value stored in $dateFormat; then add an underscore '\_'; then add the value stored in $dateDay; then another underscore '\_'; finally, add the last piece 'WL.md' ('WL' just stands for Work Log)
-  - `$filePath` - Join the value stored in `$Path` with the value stored in `$fileName`, and the end result is the full path of the daily Work log file, which looks something like: `C:\Users\%USERNAME%\Documents\GitHub\WorkLog\20150205_Thursday_WL.md`
+I need to get some date details and convert them to strings so that I can create a custom, standard file name as well as the date detail that will get stored in the actual file.
+
+  * `$now` - Get and assign the current date information in the $now variable, so that we can use to construct our custom file format.
+  * `$dateFormat` - Call the .tostring() method on the $now variable and format the output so it will look like '20150205'
+  * `$dateDay` - Call the .tostring() method but specify 'dddd' in order to get the day of the week in long format, like 'Thursday'
+  * `$fileName` - Build out the actual file name string. I'm adding the value stored in $dateFormat; then add an underscore `_`; then add the value stored in $dateDay; then another underscore `_`; finally, add the last piece 'WL.md' ('WL' just stands for Work Log)
+  * `$filePath` - Join the value stored in `$Path` with the value stored in `$fileName`, and the end result is the full path of the daily Work log file, which looks something like: __`C:\Users\%USERNAME%\Documents\GitHub\WorkLog\20150205_Thursday_WL.md`__
 
 
 
@@ -93,41 +95,41 @@ BEGIN {
 ```
 PROCESS {
 
-		if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)) {
+  if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)) {
 
-			try {
+    try {
 
-				Write-Verbose -Message 'Creating worklog file'
-				New-Item -Path $filePath -Type File -ErrorAction 'Stop' | Out-Null
+      Write-Verbose -Message 'Creating worklog file'
+      New-Item -Path $filePath -Type File -ErrorAction 'Stop' | Out-Null
 
-				Write-Verbose -Message 'Adding message to Work Log'
-				Write-Output -InputObject '## Work Log ' | Out-File -LiteralPath $filePath -Append
-				Write-Output -InputObject "### $nowLong" | Out-File -LiteralPath $filePath -Append
-				Write-Output -InputObject ' ' | Out-File -LiteralPath $filePath -Append
-				Write-Output -InputObject '* ' | Out-File -LiteralPath $filePath -Append
+      Write-Verbose -Message 'Adding message to Work Log'
+      Write-Output -InputObject '## Work Log ' | Out-File -LiteralPath $filePath -Append
+      Write-Output -InputObject "### $nowLong" | Out-File -LiteralPath $filePath -Append
+      Write-Output -InputObject ' ' | Out-File -LiteralPath $filePath -Append
+      Write-Output -InputObject '* ' | Out-File -LiteralPath $filePath -Append
 
-				if (Test-Path -LiteralPath $filePath -PathType Leaf) {
+        if (Test-Path -LiteralPath $filePath -PathType Leaf) {
 
-					Write-Verbose -Message 'Work Log file created successfully'
+            Write-Verbose -Message 'Work Log file created successfully'
 
-				} else {
+        } else {
 
-					Write-Verbose -Message 'Work Log file not created'
+            Write-Verbose -Message 'Work Log file not created'
 
-				} # end if/else Test-Path
+        } # end if/else Test-Path
 
-			} catch {
+    } catch {
 
-				Write-Warning -Message "Error creating work log file. $_"
+      Write-Warning -Message "Error creating work log file. $_"
 
-			} # end try/catch
-		} else {
+    } # end try/catch
+  } else {
 
-			Write-Warning -Message 'Worklog for today had already been created'
+    Write-Warning -Message 'Worklog for today had already been created'
 
-		} # end if/else
+  } # end if/else
 
-	} # end PROCESS block
+} # end PROCESS block
   ```
 
 *  First, we create a logical statement that tests for the existence of the log file and if it does not exist, we want to create it, but if it does exist, we want to display a message to the console saying that it already exists. Since I only want to take action if it DOES NOT exist, I start by using that criteria as the first validation via '-not' operator. `if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)`
@@ -170,30 +172,30 @@ function Add-WorkLog {
 ```
 BEGIN {
 
-		$now        = Get-Date
-		$dateFormat = $now.tostring('yyyyMMdd')
-		$dateDay    = $now.tostring('dddd')
-		$fileName   = $dateFormat + '_' + $dateDay + '_' + 'WL.md'
-		$filePath   = Join-Path $Path $fileName
-		$nowLong    = $now.tostring('D')
+  $now        = Get-Date
+  $dateFormat = $now.tostring('yyyyMMdd')
+  $dateDay    = $now.tostring('dddd')
+  $fileName   = $dateFormat + '_' + $dateDay + '_' + 'WL.md'
+  $filePath   = Join-Path $Path $fileName
+  $nowLong    = $now.tostring('D')
 
-		function Add-Indent {
-			[cmdletbinding()]
-			param (
-				[parameter(Mandatory = $true)]
-				[System.String]$Level
-			)
+  function Add-Indent {
+      [cmdletbinding()]
+      param (
+          [parameter(Mandatory = $true)]
+          [System.String]$Level
+      )
 
-			switch ($Level) {
-				'1' { '  * ' }
-				'2' { '    * ' }
-				'3' { '      * ' }
-				'4' { '        * ' }
-			} # end switch
+      switch ($Level) {
+          '1' { '  * ' }
+          '2' { '    * ' }
+          '3' { '      * ' }
+          '4' { '        * ' }
+      } # end switch
 
-		} # end function indent
+  } # end function indent
 
-	} # end BEGIN block
+} # end BEGIN block
 ```
 
 * I won't go over the date variables since we reviewed that in the 'New-WorkLog' function
