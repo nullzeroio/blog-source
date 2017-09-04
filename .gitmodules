@@ -1,0 +1,4 @@
+[submodule "public"]
+	path = public
+	url = https://vScripter@github.com/nullzeroio/nullzeroio.github.io.git
+	branch = master
