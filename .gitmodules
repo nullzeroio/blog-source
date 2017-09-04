@@ -2,3 +2,5 @@
 	path = public
 	url = https://vScripter@github.com/nullzeroio/nullzeroio.github.io.git
 	branch = master
+[submodule "themes/hugo_theme_pickles"]
+	path = themes/hugo_theme_pickles
