@@ -35,3 +35,5 @@ To verify/modify access:
 7. Restart vCenter services and see if access has been restored
 
 In this particular scenario, it was found that the client entered the incorrect details during the install wizard, which is why no one was able to access vCenter.
+
+[img-1-vpx-access]: https://github.com/nullzeroio/blog-source/blob/master/static/public/img/VPX_ACCESS_1.jpg
