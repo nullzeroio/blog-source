@@ -28,7 +28,7 @@ To verify/modify access:
 
 5. You should see a single row (if this is a new install) with the group/account details that you setup as part of the install wizard, in the `PRINCIPAL` column.
 
-![][img-1-vpx-access]
+![VPX Access][img-1-vpx-access]
 
 6. Make any necessary changes to the account details and close the table
 
@@ -36,4 +36,4 @@ To verify/modify access:
 
 In this particular scenario, it was found that the client entered the incorrect details during the install wizard, which is why no one was able to access vCenter.
 
-[img-1-vpx-access]: https://github.com/nullzeroio/blog-source/blob/master/static/public/img/VPX_ACCESS_1.jpg
+[img-1-vpx-access]: https://raw.githubusercontent.com/nullzeroio/blog-source/master/static/public/img/VPX_ACCESS_1.jpg
