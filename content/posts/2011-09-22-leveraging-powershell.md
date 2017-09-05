@@ -25,7 +25,9 @@ The last point I will make is about PowerGUI. PowerGUI is a management interface
 
 
 ![VMware][img-1-vmware]
+
 * * *
+
 ![Netapp][img-2-netapp]
 
 [1]: http://bit.ly/nZibEn

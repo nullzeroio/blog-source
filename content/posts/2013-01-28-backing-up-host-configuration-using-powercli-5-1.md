@@ -23,8 +23,9 @@ _Aside: This is just the basic command; there are plenty of other ways to automa
 2. Connect to your vCenter server:
 
 3. Expand the screen shot below to view the full command. The output will be a gzipped tar file in the location that you specify.
-```
-Get-VMHostFirmware -VMHost esxi01.devlab.local -BackupConfiguration -DestinationPath c:\hostconfigs\esxi01
-```
+
+<script src="https://gist.github.com/vScripter/bf292f673a5092f8859cc6ec1f3982b4.js"></script>
+
+![Host Backup][img-1]
 
 [img-1]: https://raw.githubusercontent.com/nullzeroio/blog-source/master/static/public/img/powerclihostbackup.png

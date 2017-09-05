@@ -54,83 +54,27 @@ Lets take a closer look at each function.
 
 ### Function header
 
-```
-function New-WorkLog {
-
-  [cmdletbinding()]
-  param (
-	[parameter(Mandatory = $false)]
-	[System.String]$Path = "$ENV:USERPROFILE\Documents\GitHub\WorkLog"
-  )
-```
+<script src="https://gist.github.com/vScripter/b3038ff5dca92467cb43c6e79c0e9f98.js"></script>
 
 Pretty standard material getting things started. The main item worth noting is that I hard coded the working directory and assigned it to the -Path parameter.
 
 ### BEGIN Block
-```
-BEGIN {
 
-  $now        = Get-Date
-  $dateFormat = $now.tostring('yyyyMMdd')
-  $dateDay    = $now.tostring('dddd')
-  $fileName   = $dateFormat + '_' + $dateDay + '_' + 'WL.md'
-  $filePath   = Join-Path $Path $fileName
-  $nowLong    = $now.tostring('D')
-
-} # end BEGIN block
-```
+<script src="https://gist.github.com/vScripter/235539b140c5b75432689f009897eb67.js"></script>
 
 I need to get some date details and convert them to strings so that I can create a custom, standard file name as well as the date detail that will get stored in the actual file.
 
-  * `$now` - Get and assign the current date information in the $now variable, so that we can use to construct our custom file format.
-  * `$dateFormat` - Call the .tostring() method on the $now variable and format the output so it will look like '20150205'
-  * `$dateDay` - Call the .tostring() method but specify 'dddd' in order to get the day of the week in long format, like 'Thursday'
-  * `$fileName` - Build out the actual file name string. I'm adding the value stored in $dateFormat; then add an underscore `_`; then add the value stored in $dateDay; then another underscore `_`; finally, add the last piece 'WL.md' ('WL' just stands for Work Log)
-  * `$filePath` - Join the value stored in `$Path` with the value stored in `$fileName`, and the end result is the full path of the daily Work log file, which looks something like: __`C:\Users\%USERNAME%\Documents\GitHub\WorkLog\20150205_Thursday_WL.md`__
+  * __`$now`__ - Get and assign the current date information in the $now variable, so that we can use to construct our custom file format.
+  * __`$dateFormat`__ - Call the .tostring() method on the $now variable and format the output so it will look like '20150205'
+  * __`$dateDay`__ - Call the .tostring() method but specify 'dddd' in order to get the day of the week in long format, like 'Thursday'
+  * __`$fileName`__ - Build out the actual file name string. I'm adding the value stored in $dateFormat; then add an underscore `_`; then add the value stored in $dateDay; then another underscore `_`; finally, add the last piece 'WL.md' ('WL' just stands for Work Log)
+  * __`$filePath`__ - Join the value stored in `$Path` with the value stored in `$fileName`, and the end result is the full path of the daily Work log file, which looks something like: __`C:\Users\%USERNAME%\Documents\GitHub\WorkLog\20150205_Thursday_WL.md`__
 
 
 
 ### PROCESS Block
 
-```
-PROCESS {
-
-  if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)) {
-
-    try {
-
-      Write-Verbose -Message 'Creating worklog file'
-      New-Item -Path $filePath -Type File -ErrorAction 'Stop' | Out-Null
-
-      Write-Verbose -Message 'Adding message to Work Log'
-      Write-Output -InputObject '## Work Log ' | Out-File -LiteralPath $filePath -Append
-      Write-Output -InputObject "### $nowLong" | Out-File -LiteralPath $filePath -Append
-      Write-Output -InputObject ' ' | Out-File -LiteralPath $filePath -Append
-      Write-Output -InputObject '* ' | Out-File -LiteralPath $filePath -Append
-
-        if (Test-Path -LiteralPath $filePath -PathType Leaf) {
-
-            Write-Verbose -Message 'Work Log file created successfully'
-
-        } else {
-
-            Write-Verbose -Message 'Work Log file not created'
-
-        } # end if/else Test-Path
-
-    } catch {
-
-      Write-Warning -Message "Error creating work log file. $_"
-
-    } # end try/catch
-  } else {
-
-    Write-Warning -Message 'Worklog for today had already been created'
-
-  } # end if/else
-
-} # end PROCESS block
-  ```
+<script src="https://gist.github.com/vScripter/875d57a8b453e2a1661f83f7f9c2be46.js"></script>
 
 *  First, we create a logical statement that tests for the existence of the log file and if it does not exist, we want to create it, but if it does exist, we want to display a message to the console saying that it already exists. Since I only want to take action if it DOES NOT exist, I start by using that criteria as the first validation via '-not' operator. `if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)`
 
@@ -144,59 +88,16 @@ PROCESS {
 ## Add-Workload
 
 ### Function Header
-```
-function Add-WorkLog {
 
-    [cmdletbinding()]
-    param (
-        [parameter(Mandatory = $true,
-                   Position = 0)]
-        [System.String]$Message,
-
-        [parameter(Mandatory = $false,
-                   Position = 1)]
-        [System.String]$Path = "$ENV:USERPROFILE\Documents\GitHub\WorkLog",
-
-        [parameter(Mandatory = $false,
-                   Position = 2)]
-        [ValidateSet('1', '2', '3', '4')]
-        [System.String]$Indent
-    )
-```
+<script src="https://gist.github.com/vScripter/b6916f6c39f89e913417c628983fe5b3.js"></script>
 
 * I needed some parameters to deal with the actual message/update to be entered into the Work Log, as well as an -Indent parameter to specify the level of indentation
     * `-Message` - This is the string data that will actually be appended into the Work Log file. I set the position at '0' so that I can quickly add entries without having to specify '-Message' before typing the message.
     * `-Indent` - This is the level of desired indentation and is only required if you want to indent the entry. I only want to offer 4 levels of indentation, so I specify a [ValidateSet()] attribute to the parameter with the only values I want to accept (1,2,3,4). These values get passed to a function that actually reads the value and performs the proper indentation spacing when it appends the entry to the Work Log file. More on that in the PROCESS block
 
 ### BEGIN Block
-```
-BEGIN {
 
-  $now        = Get-Date
-  $dateFormat = $now.tostring('yyyyMMdd')
-  $dateDay    = $now.tostring('dddd')
-  $fileName   = $dateFormat + '_' + $dateDay + '_' + 'WL.md'
-  $filePath   = Join-Path $Path $fileName
-  $nowLong    = $now.tostring('D')
-
-  function Add-Indent {
-      [cmdletbinding()]
-      param (
-          [parameter(Mandatory = $true)]
-          [System.String]$Level
-      )
-
-      switch ($Level) {
-          '1' { '  * ' }
-          '2' { '    * ' }
-          '3' { '      * ' }
-          '4' { '        * ' }
-      } # end switch
-
-  } # end function indent
-
-} # end BEGIN block
-```
+<script src="https://gist.github.com/vScripter/a2deac64abf66ad6758426f24b59efec.js"></script>
 
 * I won't go over the date variables since we reviewed that in the 'New-WorkLog' function
 * I created the 'Add-Indent' function to handle the indentation spacing that results in a properly formatted, indented, markdown file.
@@ -204,64 +105,8 @@ BEGIN {
     * I use a basic 'switch' statement to define the spacing that gets outputted when the function is called. More on this functionality in the PROCESS block
 
 ### PROCESS Block
-```
-PROCESS {
 
-  if (Test-Path -LiteralPath $filePath) {
-
-      if ($Indent) {
-
-          $indentMessage = $(Add-Indent -Level $Indent) + $Message
-          Write-Verbose -Message 'Adding message to Work Log'
-          Write-Output -InputObject $indentMessage | Out-File $filePath -Append
-
-      } else {
-
-          Write-Verbose -Message 'Adding message to Work Log'
-          Write-Output -InputObject "* $Message" | Out-File $filePath -Append
-
-      } # end if/else $Indent
-
-  } elseif (-not (Test-Path -LiteralPath $filePath)) {
-
-      Write-Warning -Message 'Work log not created'
-      try {
-
-          Write-Verbose -Message 'Creating worklog file'
-          New-Item -Path $filePath -Type File -ErrorAction 'Stop' | Out-Null
-
-          if ($Indent) {
-
-              Write-Warning -Message "Since the file has not be created, your '-Indent' input of '$Indent' will be ignored for the first log entry."
-
-          } # end if $Indent
-
-          Write-Verbose -Message 'Adding message to Work Log'
-          Write-Output -InputObject '## Work Log ' | Out-File -LiteralPath $filePath -Append
-          Write-Output -InputObject "### $nowLong" | Out-File -LiteralPath $filePath -Append
-          Write-Output -InputObject ' ' | Out-File -LiteralPath $filePath -Append
-          Write-Output -InputObject "* $Message" | Out-File -LiteralPath $filePath -Append
-
-          if (Test-Path -LiteralPath $filePath -PathType Leaf) {
-
-              Write-Verbose -Message 'Work Log file created successfully'
-
-          } else {
-
-              Write-Verbose -Message 'Work Log file not created'
-
-          } # end if/else
-
-      } catch {
-
-          Write-Warning -Message "Error creating work log file. $_"
-
-      } # end try/catch
-
-  } # end if/elseif
-
-} # end PROCESS block
-```
+<script src="https://gist.github.com/vScripter/376fcc4c5c6027f9d3d6903c2e4136da.js"></script>
 
 * I start with a conditional statement to check and see if the WorkLog file exists and if it does, then check to see if there was a desired indent level.
 * `$indentMessage` - Stores the properly indented message that will be written to the Work Log file. It merges the desired indent with the provided -Message string
@@ -276,15 +121,8 @@ PROCESS {
 ## Get-Worklog
 
 ### Function Header
-```
-function Get-WorkLog {
 
-	[cmdletbinding()]
-	param (
-		[parameter(Mandatory = $false)]
-		[System.String]$Path = "$ENV:USERPROFILE\Documents\GitHub\WorkLog"
-	)
-```
+<script src="https://gist.github.com/vScripter/1d5d89607a403930085eaae1e4a718e4.js"></script>
 
 This isn't any different than the start of the New-WorkLog function, so you can reference that if you have any questions
 
@@ -293,21 +131,8 @@ This isn't any different than the start of the New-WorkLog function, so you can 
 This is also no different than the New-WorkLog function; you can reference more detail above
 
 ### PROCESS Block
-```
-PROCESS {
 
-  if (Test-Path -LiteralPath $filePath -PathType Leaf) {
-
-    Get-Content -LiteralPath $filePath -ReadCount 0
-
-  } else {
-
-    Write-Warning -Message 'Work Log file has not been created'
-
-  } # end if/else
-
-} # end PROCESS block
-```
+<script src="https://gist.github.com/vScripter/94bf70bd9caad40d85109db32b9ef0da.js"></script>
 
 * This is the most straight forward function, of all the rest. We are just using the Get-Content cmdlet to read in and display the contents of the current work log file.
 * I use the '-ReadCount 0' parameter so that is reads the entire file contents in at one time, instead of line-by-line.
@@ -321,29 +146,18 @@ PROCESS {
 
 Below are some example commands and the file/file format that they produce
 
-```
-Add-WorkLog 'This is the first item of the day'
-Add-WorkLog 'This is the first sub-item of the day' -Indent 1
-Add-WorkLog 'This is the first sub-sub-item of the day' -Indent 2
-Add-WorkLog 'This is the second item of the day'
-Add-WorkLog "This is how using back-tick marks through the PowerShell console can be used to ````show code```` in the GFM"
-```
+<script src="https://gist.github.com/vScripter/278883d3ca1f5e0d6d98cc8d595c1ebd.js"></script>
 
 #### Output file name
 
-`20150206_Friday_WL.md`
+```
+20150206_Friday_WL.md
+```
 
 #### Output file content
 
-```
-## Work Log
-### Friday, February 06, 2015
-
-* This is the first item of the day
-  * This is the first sub-item of the day
-    * This is the first sub-sub-item of the day
-* This is the second item of the day
-* This is what using back-tick marks through the PowerShell console can be used to ``show code`` in the GFM
-```
+<script src="https://gist.github.com/vScripter/084f7fac5a029973af29d28467679362.js"></script>
 
 #### End result
+
+<script src="https://gist.github.com/vScripter/2423657ccb434eaab7328aa1f567a7a9.js"></script>
