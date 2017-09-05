@@ -1,10 +1,8 @@
 ---
 title: Nexus 1000v Max-Ports
+slug: /nexus-1000v-max-ports/
 date: 2011-12-14T21:15:54+00:00
 author: Kevin Kirkpatrick
-slug: /nexus-1000v-max-ports/
-post_views_count:
-  - "316"
 categories:
   - Cisco 1000V
   - VMware
