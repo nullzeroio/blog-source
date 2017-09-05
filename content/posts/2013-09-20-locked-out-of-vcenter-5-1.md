@@ -1,5 +1,6 @@
 ---
 title: Locked Out of vCenter 5.1
+slug: locked-out-of-vcenter-5-1
 date: 2013-09-20T15:38:39+00:00
 author: Kevin Kirkpatrick
 categories:

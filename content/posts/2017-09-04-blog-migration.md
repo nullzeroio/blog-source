@@ -1,5 +1,6 @@
 ---
 title: Blog Migration
+slug: blog-migration
 date: 2017-09-04
 author: Kevin Kirkpatrick
 draft: false

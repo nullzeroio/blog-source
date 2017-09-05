@@ -1,6 +1,6 @@
 ---
 title: WorkLog PowerShell Module
-linktitle: WorkLog PowerShell Module
+slug: worklog-powershell-module
 date: 2015-02-06
 author: "Kevin Kirkpatrick"
 draft: false
