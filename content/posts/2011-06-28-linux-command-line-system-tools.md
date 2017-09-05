@@ -1,5 +1,4 @@
 ---
-id: 143
 title: Linux Command Line System Tools
 slug: /linux-command-line-system-tools/
 date: 2011-06-28T16:14:57+00:00
