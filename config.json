@@ -1,5 +1,5 @@
 {
-    "baseURL": "http://www.nullzero.io/",
+    "baseURL": "https://www.nullzero.io/",
     "languageCode": "en-us",
     "title": "NullZero.io",
     "theme": "hugo_theme_pickles",
