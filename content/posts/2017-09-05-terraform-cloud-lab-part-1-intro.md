@@ -1,7 +1,7 @@
 ---
 title: Terraform Cloud Lab - Part-1 - Intro
 slug: /terraform-cloud-lab-part-1-intro/
-date: 2017-09-05
+date: 2018-05-20
 author: Kevin Kirkpatrick
 categories:
   - terraform
