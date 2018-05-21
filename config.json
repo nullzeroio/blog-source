@@ -4,7 +4,7 @@
     "title": "NullZero.io",
     "theme": "hugo_theme_pickles",
     "params": {
-        "paginate": 10,
+        "paginate": 5,
         "twitter": "vScripter",
         "github": "vScripter",
         "linkedin":"kevinmkirkpatrick",
